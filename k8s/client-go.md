@@ -73,3 +73,20 @@ func (impl *cloudImpl) GetPVC(namespace string, pvcName string) *unstructured.Un
     	},
     },
 ```
+
+4. Create PVC
+```golang
+var gvrRes = schema.GroupVersionResource{Group: "", Version: "v1", Resource: "persistentvolumeclaims"}
+
+logrus.Infof("============creating vpc %q", info.Namespace)
+pvcRes, err := cci.dynacli.Resource(gvrRes).Namespace(info.Namespace).Create(
+    context.TODO(),
+    info.StorageClaim,
+    metav1.CreateOptions{},
+)
+if err != nil {
+    return err
+}
+
+logrus.Infof("create vpc %q success", pvcRes.GetName())
+```
